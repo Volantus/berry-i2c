@@ -1,4 +1,11 @@
 <?php
+namespace Volantus\BerryI2C;
+
+/**
+ * Class I2cInterface
+ *
+ * @package Volantus\BerryI2C
+ */
 class I2cInterface
 {
     /**
@@ -9,6 +16,13 @@ class I2cInterface
      * @param int $flags
      */
     public function __construct(int $bus, int $address, int $flags = 0)
+    {
+    }
+
+    /**
+     * Opens the I²C connection
+     */
+    public function open()
     {
     }
 
@@ -25,7 +39,6 @@ class I2cInterface
     public function getAddress(): int
     {
     }
-
 
     /**
      * @return int
