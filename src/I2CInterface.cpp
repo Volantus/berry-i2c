@@ -1,5 +1,6 @@
 #include <phpcpp.h>
 #include <stdint.h>
+#include <pigpio.h>
 #include "I2CInterface.hpp"
 
 void I2CInterface::__construct(Php::Parameters &params)
@@ -11,6 +12,11 @@ void I2CInterface::__construct(Php::Parameters &params)
     bus = _bus;
     address = _address;
     flags = _flags;
+
+    // ToDo: Move this to load section of extension and check return code
+    // ToDo: Add gpioTerminate before PHP process exits
+    // ToDo: Add check in constructor if init was successful and maybe throw exception?
+    gpioInitialise();
 }
 
 void I2CInterface::open()
