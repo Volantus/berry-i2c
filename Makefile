@@ -1,47 +1,82 @@
-NAME           = berry-i2c
-UBUNTU_MAJOR  := $(shell /usr/bin/lsb_release -r -s | cut -f1 -d.)
-OVER_SIXTEEN  := $(shell echo "${UBUNTU_MAJOR} >= 16" | bc)
-OVER_FOURTEEN := $(shell echo "${UBUNTU_MAJOR} >= 14" | bc)
+NAME				=	berry-i2c
 
-ifeq (${OVER_SIXTEEN}, 1)
-    INI_DIR     =   /etc/php/7.0/mods-available/
-else ifeq (${OVER_FOURTEEN}, 1)
-    INI_DIR     =   /etc/php5/mods-available/
+#
+#	INI directories
+#
+PHP_MAJOR_VERSION  := $(shell php -v | grep -i 'PHP [57]' | sed s/'PHP '//g | cut -c1-1)
+PHP_SUB_VERSION    := $(shell php -v | grep -i 'PHP [57]' | cut -c1-8 | sed s/'PHP '//g | cut -c1-3)
+
+ifeq (${PHP_MAJOR_VERSION}, 7)
+    INI_DIR     :=   /etc/php/${PHP_SUB_VERSION}/mods-available/
 else
-    INI_DIR     =   /etc/php5/conf.d/
+    INI_DIR     :=   /etc/php5/mods-available/
 endif
 
-EXTENSION_DIR       =   $(shell php-config --extension-dir)
+#
+#	The extension dirs
+#
 
-EXTENSION           =   ${NAME}.so
-INI                 =   ${NAME}.ini
-
-COMPILER            =   g++
-LINKER              =   g++
-
-COMPILER_FLAGS      =   -Wall -c -O2 -std=c++11 -fpic -o
-LINKER_FLAGS        =   -shared
-LINKER_DEPENDENCIES =   -lphpcpp
-
-RM                  =   rm -f
-CP                  =   cp -f
-MKDIR               =   mkdir -p
-
-SOURCES             =   $(wildcard *.cpp)
-OBJECTS             =   $(SOURCES:%.cpp=%.o)
+EXTENSION_DIR		=	$(shell php-config --extension-dir)
 
 
-all:                    ${OBJECTS} ${EXTENSION}
+#
+#	The name of the extension and the name of the .ini file
+#
 
-${EXTENSION}:           ${OBJECTS}
-                        ${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS} ${LINKER_DEPENDENCIES}
+EXTENSION 			=	${NAME}.so
+INI 				=	${NAME}.ini
+
+
+#
+#	Compiler
+#
+
+COMPILER			=	g++
+LINKER				=	g++
+
+
+#
+#	Compiler and linker flags
+#
+
+COMPILER_FLAGS		=	-Wall -c -O2 -std=c++11 -fpic -o
+LINKER_FLAGS		=	-shared
+LINKER_DEPENDENCIES	=	-lphpcpp
+
+
+#
+#	Command to remove files, copy files and create directories.
+#
+
+RM					=	rm -f
+CP					=	cp -f
+MKDIR				=	mkdir -p
+
+
+#
+#	All source files are simply all *.cpp files found in the current directory
+#
+
+SOURCES				=	$(wildcard src/*.cpp)
+OBJECTS				=	$(SOURCES:%.cpp=%.o)
+
+
+#
+#	From here the build instructions start
+#
+
+all:					${OBJECTS} ${EXTENSION}
+
+${EXTENSION}:			${OBJECTS}
+						${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS} ${LINKER_DEPENDENCIES}
 
 ${OBJECTS}:
-                        ${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
+						${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
 
-install:
-                        ${CP} ${EXTENSION} ${EXTENSION_DIR}
-                        ${CP} ${INI} ${INI_DIR}
-
+install:		
+						${CP} ${EXTENSION} ${EXTENSION_DIR}
+						${CP} ${INI} ${INI_DIR}
+				
 clean:
-                        ${RM} ${EXTENSION} ${OBJECTS}
+						${RM} ${EXTENSION} ${OBJECTS}
+
