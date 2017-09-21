@@ -1,4 +1,6 @@
 #include <phpcpp.h>
+#include <pigpio.h>
+#include "BerryI2cState.hpp"
 #include "I2CInterface.hpp"
 
 extern "C" {
@@ -20,6 +22,14 @@ extern "C" {
         i2cInterface.method<&I2CInterface::open> ("open");
 
         extension.add(std::move(i2cInterface));
+
+        extension.onStartup([]() {
+            BerryI2cState::initDependencies();
+        });
+
+        extension.onShutdown([]() {
+            BerryI2cState::cleanDependencies();
+        });
 
         return extension;
     }
