@@ -12,6 +12,7 @@ void I2CInterface::__construct(Php::Parameters &params)
     if (params.size() > 2) {
         _flags = params[2];
     }
+    handle = -1;
 
     if (_bus < 0) {throw Php::Exception("No negative values allowed for <bus> parameter");}
     if (_address < 0) {throw Php::Exception("No negative values allowed for <address> parameter");}
@@ -31,6 +32,22 @@ void I2CInterface::__construct(Php::Parameters &params)
 void I2CInterface::open()
 {
     handle = i2cOpen(bus, address, flags);
+}
+
+void I2CInterface::close()
+{
+    if (handle == -1) {
+        throw Php::Exception("Unable to close an unestablished device connection");
+    }
+
+    int expectedRc = handle;
+    int rc = i2cClose(handle);
+    handle = -1;
+
+    if (rc != expectedRc) {
+        std::string message = "i2cClose failed as RC " + std::to_string(rc) + " does not match expected handle " + std::to_string(expectedRc);
+        throw Php::Exception(message);
+    }
 }
 
 Php::Value I2CInterface::getBus() const { return (int16_t) bus; }

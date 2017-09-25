@@ -20,6 +20,7 @@ extern "C" {
         i2cInterface.method<&I2CInterface::getAddress> ("getAddress");
         i2cInterface.method<&I2CInterface::getFlags> ("getFlags");
         i2cInterface.method<&I2CInterface::open> ("open");
+        i2cInterface.method<&I2CInterface::close> ("close");
 
         extension.add(std::move(i2cInterface));
 

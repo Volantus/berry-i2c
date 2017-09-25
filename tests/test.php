@@ -7,3 +7,4 @@ var_dump($i2cInterface->getAddress());
 var_dump($i2cInterface->getFlags());
 
 $i2cInterface->open();
+$i2cInterface->close();

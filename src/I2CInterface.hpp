@@ -36,4 +36,5 @@ public:
     Php::Value getFlags() const;
 
     void open();
+    void close();
 };

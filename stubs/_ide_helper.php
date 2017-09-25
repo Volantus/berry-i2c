@@ -20,9 +20,16 @@ class I2cInterface
     }
 
     /**
-     * Opens the I²C connection
+     * Opens the I2C device
      */
     public function open()
+    {
+    }
+
+    /**
+     * This closes the I2C device associated
+     */
+    public function close()
     {
     }
 
