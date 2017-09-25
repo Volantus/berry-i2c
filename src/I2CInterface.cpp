@@ -30,6 +30,7 @@ void I2CInterface::__construct(Php::Parameters &params)
 
 void I2CInterface::open()
 {
+    handle = i2cOpen(bus, address, flags);
 }
 
 Php::Value I2CInterface::getBus() const { return (int16_t) bus; }

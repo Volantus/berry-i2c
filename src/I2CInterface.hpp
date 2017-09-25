@@ -2,6 +2,12 @@ class I2CInterface : public Php::Base
 {
 private:
     /**
+     *  Handle for the device at the address on the I2C bus.
+     *  @var    unsigned
+     */
+    int handle = -1;
+
+    /**
      *  An I2C bus number
      *  @var    unsigned
      */
