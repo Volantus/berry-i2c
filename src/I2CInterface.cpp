@@ -13,6 +13,10 @@ void I2CInterface::__construct(Php::Parameters &params)
         _flags = params[2];
     }
 
+    if (_bus < 0) {throw Php::Exception("No negative values allowed for <bus> parameter");}
+    if (_address < 0) {throw Php::Exception("No negative values allowed for <address> parameter");}
+    if (_flags < 0) {throw Php::Exception("No negative values allowed for <flags> parameter");}
+
     bus = _bus;
     address = _address;
     flags = _flags;
