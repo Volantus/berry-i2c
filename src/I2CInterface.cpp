@@ -31,7 +31,21 @@ void I2CInterface::__construct(Php::Parameters &params)
 
 void I2CInterface::open()
 {
-    handle = i2cOpen(bus, address, flags);
+    int rc = i2cOpen(bus, address, flags);
+
+    if (rc > 0) {
+        handle = rc;
+    } else if (rc == PI_BAD_I2C_BUS) {
+        throw Php::Exception("i2cOpen failed => bad i2c bus");
+    } else if (rc == PI_BAD_I2C_ADDR) {
+        throw Php::Exception("i2cOpen failed => bad i2c address");
+    } else if (rc == PI_BAD_FLAGS) {
+        throw Php::Exception("i2cOpen failed => bad i2c flags");
+    } else if (rc == PI_NO_HANDLE) {
+        throw Php::Exception("i2cOpen failed => no handle available");
+    } else {
+        throw Php::Exception("i2cOpen failed => opening failed for unknown reason");
+    }
 }
 
 void I2CInterface::close()
