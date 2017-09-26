@@ -1,6 +1,7 @@
 #include <phpcpp.h>
 #include <pigpio.h>
 #include "BerryI2cState.hpp"
+#include "BerryI2cExceptions.hpp"
 #include "I2CInterface.hpp"
 
 extern "C" {
@@ -26,6 +27,7 @@ extern "C" {
 
         extension.onStartup([]() {
             BerryI2cState::initDependencies();
+            BerryI2cExceptions::prepare();
         });
 
         extension.onShutdown([]() {

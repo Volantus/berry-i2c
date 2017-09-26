@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <pigpio.h>
 #include "BerryI2cState.hpp"
+#include "BerryI2cExceptions.hpp"
 #include "I2CInterface.hpp"
 
 void I2CInterface::__construct(Php::Parameters &params)
