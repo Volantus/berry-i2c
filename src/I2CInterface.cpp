@@ -56,8 +56,9 @@ void I2CInterface::open()
 void I2CInterface::close()
 {
     if (handle == -1) {
-        throw Php::Exception("Unable to close an unestablished device connection");
-    }
+        BerryI2cExceptions::LogicException("Unable to close an unestablished device connection");
+        return;
+    }  
 
     int expectedRc = handle;
     int rc = i2cClose(handle);

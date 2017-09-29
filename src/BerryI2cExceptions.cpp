@@ -4,11 +4,13 @@
 
 zend_class_entry* BerryI2cExceptions::_gioInitFailureException;
 zend_class_entry* BerryI2cExceptions::_invalidArgumentException;
+zend_class_entry* BerryI2cExceptions::_logicException;
 
 void BerryI2cExceptions::prepare()
 {
     registerException("Volantus\\BerryI2C\\InvalidArgumentException", &_invalidArgumentException);
     registerException("Volantus\\BerryI2C\\GpioInitFailureException", &_gioInitFailureException);
+    registerException("Volantus\\BerryI2C\\LogicException", &_logicException);
 }
 
 void BerryI2cExceptions::registerException(const char* name, zend_class_entry **memberClassEntry)
@@ -26,4 +28,9 @@ void BerryI2cExceptions::InvalidArgumentException(const char* message)
 void BerryI2cExceptions::GpioInitFailureException(const char* message)
 {
     zend_throw_exception_ex(_gioInitFailureException, 0, message, __FILE__, __LINE__);
+}
+
+void BerryI2cExceptions::LogicException(const char *message)
+{
+    zend_throw_exception_ex(_logicException, 0, message, __FILE__, __LINE__);
 }
