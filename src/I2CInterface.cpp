@@ -47,10 +47,10 @@ void I2CInterface::open()
         BerryI2cExceptions::InvalidArgumentException("i2cOpen failed => bad i2c flags");
         return;
     } else if (rc == PI_NO_HANDLE) {
-        BerryI2cExceptions::GpiFailureException("i2cOpen failed => no handle available");
+        BerryI2cExceptions::GpioFailureException("i2cOpen failed => no handle available");
         return;
     } else {
-        BerryI2cExceptions::GpiFailureException("i2cOpen failed => opening failed for unknown reason");
+        BerryI2cExceptions::GpioFailureException("i2cOpen failed => opening failed for unknown reason");
         return;
     }
 }
@@ -60,7 +60,7 @@ void I2CInterface::close()
     if (handle == -1) {
         BerryI2cExceptions::LogicException("Unable to close an unestablished device connection");
         return;
-    }  
+    }
 
     int expectedRc = handle;
     int rc = i2cClose(handle);
@@ -68,8 +68,39 @@ void I2CInterface::close()
 
     if (rc != expectedRc) {
         std::string message = "i2cClose failed as RC " + std::to_string(rc) + " does not match expected handle " + std::to_string(expectedRc);
-        BerryI2cExceptions::GpiFailureException(message.c_str());
-        return;;
+        BerryI2cExceptions::GpioFailureException(message.c_str());
+        return;
+    }
+}
+
+void I2CInterface::writeQuick(Php::Parameters &params)
+{
+    if (handle == -1) {
+        BerryI2cExceptions::LogicException("Unable to send data with an unestablished device connection");
+        return;
+    }
+
+    int _bit = params[0];
+    if (_bit > 1 || _bit < 0) {
+        BerryI2cExceptions::InvalidArgumentException("Invalid value for parameter <bit> given. Only 0 or 1 allowed.");
+        return;
+    }
+
+    unsigned bit = _bit;
+    int rc = i2cWriteQuick(handle, bit);
+
+    if (rc == 0) {
+        return;
+    } else if (rc == PI_BAD_PARAM) {
+        BerryI2cExceptions::GpioFailureException("i2cWriteQuick failed => bad param (PI_BAD_PARAM)");
+    } else if (rc == PI_BAD_HANDLE) {
+        BerryI2cExceptions::GpioFailureException("i2cWriteQuick failed => bad handle (PI_BAD_HANDLE)");
+    } else if (rc == PI_I2C_WRITE_FAILED) {
+        BerryI2cExceptions::GpioFailureException("i2cWriteQuick failed => write failed (PI_I2C_WRITE_FAILED)");
+    } else {
+        std::string message = "i2cWriteQuick failed => unknown error (RC=";
+        message = message + std::to_string(rc);
+        BerryI2cExceptions::GpioFailureException(message.c_str());
     }
 }
 

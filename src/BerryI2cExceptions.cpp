@@ -37,7 +37,7 @@ void BerryI2cExceptions::LogicException(const char *message)
     zend_throw_exception_ex(_logicException, 0, message, __FILE__, __LINE__);
 }
 
-void BerryI2cExceptions::GpiFailureException(const char *message)
+void BerryI2cExceptions::GpioFailureException(const char *message)
 {
     zend_throw_exception_ex(_gpioFailureException, 0, message, __FILE__, __LINE__);
 }

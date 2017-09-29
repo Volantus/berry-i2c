@@ -24,7 +24,6 @@ private:
      *  @var    unsigned 0-0x7F
      */
     unsigned flags = 0;
-
 public:
     I2CInterface() = default;
     virtual ~I2CInterface() = default;
@@ -35,6 +34,18 @@ public:
     Php::Value getAddress() const;
     Php::Value getFlags() const;
 
+    /**
+     * Opens the I2C connection (handle)
+     */
     void open();
+
+    /**
+     * Closes the I2C exception by returning the handle
+     */
     void close();
+
+    /**
+     * Sends a single bit (in the Rd/Wr bit) to the device
+     */
+    void writeQuick(Php::Parameters &params);
 };

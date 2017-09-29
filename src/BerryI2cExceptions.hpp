@@ -16,5 +16,5 @@ public:
     static void InvalidArgumentException(const char* message);
     static void GpioInitFailureException(const char* message);
     static void LogicException(const char* message);
-    static void GpiFailureException(const char* message);
+    static void GpioFailureException(const char* message);
 };

@@ -22,6 +22,9 @@ extern "C" {
         i2cInterface.method<&I2CInterface::getFlags> ("getFlags");
         i2cInterface.method<&I2CInterface::open> ("open");
         i2cInterface.method<&I2CInterface::close> ("close");
+        i2cInterface.method<&I2CInterface::writeQuick> ("writeQuick", {
+                Php::ByVal("bit", Php::Type::Numeric, true),
+        });
 
         extension.add(std::move(i2cInterface));
 
