@@ -26,6 +26,7 @@ class I2cInterface
      * Opens the I2C device
      *
      * @throws InvalidArgumentException
+     * @throws GpioFailureException
      */
     public function open()
     {
@@ -33,6 +34,9 @@ class I2cInterface
 
     /**
      * This closes the I2C device associated
+     *
+     * @throws LogicException
+     * @throws GpioFailureException
      */
     public function close()
     {
@@ -75,5 +79,23 @@ class InvalidArgumentException extends \Exception
  * @package Volantus\BerryI2C
  */
 class GpioInitException extends \Exception
+{
+}
+
+/**
+ * Class LogicException
+ *
+ * @package Volantus\BerryI2C
+ */
+class LogicException extends \Exception
+{
+}
+
+/**
+ * Class GpioFailureException
+ *
+ * @package Volantus\BerryI2C
+ */
+class GpioFailureException extends \Exception
 {
 }
