@@ -15,9 +15,9 @@ void I2CInterface::__construct(Php::Parameters &params)
     }
     handle = -1;
 
-    if (_bus < 0) {throw Php::Exception("No negative values allowed for <bus> parameter");}
-    if (_address < 0) {throw Php::Exception("No negative values allowed for <address> parameter");}
-    if (_flags < 0) {throw Php::Exception("No negative values allowed for <flags> parameter");}
+    if (_bus < 0) {BerryI2cExceptions::InvalidArgumentException("No negative values allowed for <bus> parameter"); return;}
+    if (_address < 0) {BerryI2cExceptions::InvalidArgumentException("No negative values allowed for <address> parameter"); return;}
+    if (_flags < 0) {BerryI2cExceptions::InvalidArgumentException("No negative values allowed for <flags> parameter"); return;}
 
     bus = _bus;
     address = _address;
@@ -37,11 +37,14 @@ void I2CInterface::open()
     if (rc > 0) {
         handle = rc;
     } else if (rc == PI_BAD_I2C_BUS) {
-        throw Php::Exception("i2cOpen failed => bad i2c bus");
+        BerryI2cExceptions::InvalidArgumentException("i2cOpen failed => bad i2c bus");
+        return;
     } else if (rc == PI_BAD_I2C_ADDR) {
-        throw Php::Exception("i2cOpen failed => bad i2c address");
+        BerryI2cExceptions::InvalidArgumentException("i2cOpen failed => bad i2c address");
+        return;
     } else if (rc == PI_BAD_FLAGS) {
-        throw Php::Exception("i2cOpen failed => bad i2c flags");
+        BerryI2cExceptions::InvalidArgumentException("i2cOpen failed => bad i2c flags");
+        return;
     } else if (rc == PI_NO_HANDLE) {
         throw Php::Exception("i2cOpen failed => no handle available");
     } else {
