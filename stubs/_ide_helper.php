@@ -14,6 +14,9 @@ class I2cInterface
      * @param int $bus
      * @param int $address
      * @param int $flags
+     *
+     * @throws InvalidArgumentException
+     * @throws GpioInitException
      */
     public function __construct(int $bus, int $address, int $flags = 0)
     {
@@ -21,6 +24,8 @@ class I2cInterface
 
     /**
      * Opens the I2C device
+     *
+     * @throws InvalidArgumentException
      */
     public function open()
     {
@@ -53,4 +58,22 @@ class I2cInterface
     public function getFlags(): int
     {
     }
+}
+
+/**
+ * Class InvalidArgumentException
+ *
+ * @package Volantus\BerryI2C
+ */
+class InvalidArgumentException extends \Exception
+{
+}
+
+/**
+ * Class GpioInitException
+ *
+ * @package Volantus\BerryI2C
+ */
+class GpioInitException extends \Exception
+{
 }
