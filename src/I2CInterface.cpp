@@ -26,7 +26,8 @@ void I2CInterface::__construct(Php::Parameters &params)
     if (BerryI2cState::getPigpioInitRc() < 0) {
         std::string message = "Pigpio initialization failed with RC=";
         message = message + std::to_string(BerryI2cState::getPigpioInitRc());
-        throw Php::Exception(message);
+        BerryI2cExceptions::GpioInitFailureException(message.c_str());
+        return;
     }
 }
 
