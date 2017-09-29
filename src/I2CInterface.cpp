@@ -47,9 +47,11 @@ void I2CInterface::open()
         BerryI2cExceptions::InvalidArgumentException("i2cOpen failed => bad i2c flags");
         return;
     } else if (rc == PI_NO_HANDLE) {
-        throw Php::Exception("i2cOpen failed => no handle available");
+        BerryI2cExceptions::GpiFailureException("i2cOpen failed => no handle available");
+        return;
     } else {
-        throw Php::Exception("i2cOpen failed => opening failed for unknown reason");
+        BerryI2cExceptions::GpiFailureException("i2cOpen failed => opening failed for unknown reason");
+        return;
     }
 }
 
@@ -66,7 +68,8 @@ void I2CInterface::close()
 
     if (rc != expectedRc) {
         std::string message = "i2cClose failed as RC " + std::to_string(rc) + " does not match expected handle " + std::to_string(expectedRc);
-        throw Php::Exception(message);
+        BerryI2cExceptions::GpiFailureException(message.c_str());
+        return;;
     }
 }
 
